@@ -12,15 +12,22 @@ class Cell:
         self.j = y // TILESIZE
         self.revelada = False
         self.bomba = False
-        self.bombas_total = 8
+        # There is a bug (feature) if you set a value larger than 10
+        self.bombas_total = len(self.game.grid)
+        # TODO: I have to change the bomb generation system later
         self.bombs_around = 0
         self.flag_enabled = False
 
     def reveal(self):
-        self.revelada = True
-        
-        if self.bombs_around == 0:
-            self.flood()
+        if not self.game.is_game_over:
+            self.revelada = True
+
+            if self.bombs_around == 0:
+                self.flood()
+            if self.bomba:
+                self.game.is_game_over = True
+                self.game.score = 0
+                EFFECT.play()
 
     def check_neighbours(self, grid):
         """
@@ -53,18 +60,35 @@ class Cell:
                 if i > -1 and i < len(self.game.grid) and j > -1 and j < len(self.game.grid[1]):
                     neighbor = self.game.grid[i][j]
 
-                    if not neighbor.revelada:
+                    if not neighbor.revelada and not neighbor.flag_enabled and not self.game.is_game_over:
                         neighbor.reveal()
-                        
+
     def enable_flag(self):
         self.flag_enabled = not self.flag_enabled
-        
+        if self.bomba:
+            self.game.score += 1
+        if self.game.score >= self.bombas_total:
+            self.game.win()
 
     def draw_number(self):
-        font = pygame.font.Font("data/JetBrainsMono-Bold.ttf", 24)
+        """
+        This function will draw the numbers according to the total of bombs around the cell.
+        Also it will give colors to some numbers
+        TODO: add more colors to more numbers after fixing the bombs generation system
+        """
+        text_color = (0, 0, 0)
+        if self.bombs_around == 1:
+            text_color = (0, 0, 150)
+        if self.bombs_around == 2:
+            text_color = (0, 150, 0)
+        if self.bombs_around == 3:
+            text_color = (150, 0, 0)
+        if self.bombs_around == 4:
+            text_color = (0, 100, 100)
+        font = pygame.font.Font("fonts/JetBrainsMono-Bold.ttf", 24)
         if self.bombs_around > 0 and self.revelada:
             text = font.render(
-                str(self.bombs_around), False, (0, 0, 0))
+                str(self.bombs_around), False, text_color)
             self.game.screen.blit(text, (self.x + 12, self.y))
 
     def set_bomb(self):
@@ -86,6 +110,8 @@ class Cell:
         else:
             pygame.draw.rect(
                 self.game.screen, GRAY, (self.x, self.y, TILESIZE - 1, TILESIZE - 1))
+        if self.flag_enabled and not self.revelada:
+            self.game.flag.draw(self.game.screen, self.x + 10, self.y + 10)
 
     def get_mouse_pos(self):
         mouse = pygame.mouse.get_pos()
