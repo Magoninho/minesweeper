@@ -30,25 +30,37 @@ class Game:
             for j in range(len(self.grid[i])):
                 self.grid[i][j] = Cell(self, i * TILESIZE, j * TILESIZE)
 
-        for bomb_to_set in range(self.grid[0][0].bombas_total):
-            random_x = random.randrange(0, len(self.grid[1]))
-            random_y = random.randrange(0, len(self.grid))
+        """
+        All of this code is necessary to make a random position for the bombs
+        because if you don't do it this way, a new bomb would appear in the same spot an old bomb was, overwritting it
+        """
+        random_x = random.sample(
+            range(0, len(self.grid)), self.grid[0][0].bombas_total)
+        random_y = random.sample(
+            range(0, len(self.grid[1])), self.grid[0][0].bombas_total)
 
-            # setting a random place to be a bomb
-            self.grid[random_x][random_y].set_bomb()
+        for pos in range(self.grid[0][0].bombas_total):
+            self.grid[random_x[pos]][random_y[pos]].set_bomb()
 
         for i in range(len(self.grid)):
             for j in range(len(self.grid[i])):
                 self.grid[i][j].check_neighbours(self.grid)
 
-    def update(self):
+
+    def mouse_update(self, button):
         """
         gets the coordinates of the array where the mouse is
         """
         for i in range(len(self.grid)):
             for j in range(len(self.grid[i])):
                 pos = self.grid[i][j].get_mouse_pos()
-                self.grid[pos[0]][pos[1]].revelada = True
+        if button == 1:
+            self.grid[pos[0]][pos[1]].reveal()
+        if button == 3:
+            self.grid[pos[0]][pos[1]].enable_flag()
+
+    def update(self):
+        pass
 
     def draw(self):
         self.screen.fill(BLACK)
@@ -73,6 +85,11 @@ class Game:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 3:
+                    self.mouse_update(button=3)
+                else:
+                    self.mouse_update(button=1)
 
 
 pygame.init()
