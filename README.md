@@ -1,5 +1,5 @@
 # Minesweeper in Python
-This is an attempt of doing a minesweeper in pygame
+This is an attempt of doing a minesweeper in pygame  
 ![demo](https://media.giphy.com/media/Oj2OXdUiN5Kq19e9WW/giphy.gif)  
 ## Install
 Requirements:  
