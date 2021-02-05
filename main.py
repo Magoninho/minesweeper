@@ -7,24 +7,26 @@ from cell import *
 from flag import *
 
 
+# output : True
+
 class Game:
     def __init__(self, title, width, height):
         self.title = pygame.display.set_caption(title)
         self.width = width
         self.height = height
         self.screen = pygame.display.set_mode((width, height))
-        self.done = False
+        self.done = False  # game loop condition
         self.is_game_over = False
         self.score = 0
+        self.have_won = False
 
     def setup(self):
         """
         Function for class instances and other stuff
         """
-
         self.flag = Flag(self)
 
-        # obtem o array 2D criado na classe Grid
+        # gets the grid from the Grid class
         self.grid = Grid(self.width, self.height).make_grid()
 
         """
@@ -39,14 +41,23 @@ class Game:
         All of this code is necessary to make a random position for the bombs
         because if you don't do it this way, a new bomb would appear in the same spot an old bomb was, overwritting it
         """
-        total_bombs = self.grid[0][0].bombas_total
-        random_x = random.sample(
-            range(0, len(self.grid)), total_bombs)
-        random_y = random.sample(
-            range(0, len(self.grid[1])), total_bombs)
 
-        for pos in range(total_bombs):
-            self.grid[random_x[pos]][random_y[pos]].set_bomb()
+        available = []  # an array to receive all positions available
+        # get all positions in grid
+        for i in range(len(self.grid)):
+            for j in range(len(self.grid[i])):
+                # appending all positions available in the grid
+                available.append([i, j])
+
+        # picks a random position FROM the available array
+
+        for pos in range(self.grid[0][0].bombas_total):
+            random_index = random.randrange(len(available))
+            random_x = available[random_index][0]
+            random_y = available[random_index][1]
+
+            self.grid[random_x][random_y].set_bomb()
+            available.remove([random_x, random_y])
 
         for i in range(len(self.grid)):
             for j in range(len(self.grid[i])):
@@ -56,11 +67,29 @@ class Game:
         """
         gets the coordinates of the array where the mouse is
         """
+        spots = []
+        conditions = []
+
         for i in range(len(self.grid)):
             for j in range(len(self.grid[i])):
                 pos = self.grid[i][j].get_mouse_pos()
         if button == 1:
             self.grid[pos[0]][pos[1]].reveal()
+
+            for i in range(len(self.grid)):
+                for j in range(len(self.grid[i])):
+                    if not self.grid[i][j].bomba:
+                        # the spots that doesn't have bombs
+                        spots.append([i, j])
+                        conditions.append(self.grid[i][j].revelada)
+            if all(conditions):
+                for i in range(len(self.grid)):
+                    for j in range(len(self.grid[i])):
+                        if self.grid[i][j].bomba:
+                            if not self.grid[i][j].flag_enabled:
+                                self.grid[i][j].enable_flag()
+                self.win()
+
         if button == 3:
             self.grid[pos[0]][pos[1]].enable_flag()
 
@@ -73,11 +102,14 @@ class Game:
                 "u lost lmao", False, (RED))
             self.screen.blit(text, (self.width // 5, self.height // 3))
 
+    def draw_win_text(self):
+        text2 = font.render(
+            "you won!!!!!!!!!!!!!!!!!!!!", False, (BLUE))
+        self.screen.blit(text2, (self.width // 5, self.height // 3))
+
     def win(self):
-        if self.score == self.grid[0][0].bombas_total:
-            text2 = font.render(
-                "you won!!!!!!!!!!!!!!!!!!!!", False, (BLUE))
-            self.screen.blit(text2, (self.width // 5, self.height // 3))
+        self.have_won = True
+        print("ganhaste")
 
     def draw(self):
         self.screen.fill(BLACK)
@@ -92,7 +124,6 @@ class Game:
                 self.grid[i][j].draw_number()
 
         self.gameover()
-        self.win()
 
         pygame.display.update()
 

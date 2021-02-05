@@ -12,9 +12,7 @@ class Cell:
         self.j = y // TILESIZE
         self.revelada = False
         self.bomba = False
-        # There is a bug (feature) if you set a value larger than 10
-        self.bombas_total = len(self.game.grid)
-        # TODO: I have to change the bomb generation system later
+        self.bombas_total = 20
         self.bombs_around = 0
         self.flag_enabled = False
 
@@ -65,10 +63,10 @@ class Cell:
 
     def enable_flag(self):
         self.flag_enabled = not self.flag_enabled
-        if self.bomba:
+        if self.bomba: # TODO: and self.flag_enabled
             self.game.score += 1
-        if self.game.score >= self.bombas_total:
-            self.game.win()
+        # TODO: else: self.game.score -= 1
+            # all the spots revealed shouldn't be a bomb
 
     def draw_number(self):
         """
