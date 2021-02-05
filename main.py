@@ -10,15 +10,16 @@ from flag import *
 # output : True
 
 class Game:
-    def __init__(self, title, width, height):
+    def __init__(self, title, size, bombs):
         self.title = pygame.display.set_caption(title)
-        self.width = width
-        self.height = height
-        self.screen = pygame.display.set_mode((width, height))
+        self.width = size[0]
+        self.height = size[1]
+        self.screen = pygame.display.set_mode((size[0], size[1]))
         self.done = False  # game loop condition
         self.is_game_over = False
         self.score = 0
         self.have_won = False
+        self.bombs = bombs
 
     def setup(self):
         """
@@ -35,7 +36,8 @@ class Game:
 
         for i in range(len(self.grid)):
             for j in range(len(self.grid[i])):
-                self.grid[i][j] = Cell(self, i * TILESIZE, j * TILESIZE)
+                self.grid[i][j] = Cell(
+                    self, i * TILESIZE, j * TILESIZE, self.bombs)
 
         """
         All of this code is necessary to make a random position for the bombs
@@ -109,7 +111,7 @@ class Game:
 
     def win(self):
         self.have_won = True
-        print("ganhaste")
+        TADA.play()
 
     def draw(self):
         self.screen.fill(BLACK)
@@ -122,7 +124,8 @@ class Game:
             for j in range(len(self.grid[i])):
                 self.grid[i][j].draw_cell()
                 self.grid[i][j].draw_number()
-
+        if self.have_won:
+            self.draw_win_text()
         self.gameover()
 
         pygame.display.update()
@@ -144,7 +147,59 @@ class Game:
 
 
 pygame.init()
-game = Game("Minesweeper", 400, 400)  # make this responsive later
+# Limpador de tela multiplataforma Magoninho Gamer versão 1.2
+
+
+def limpa_tela():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+
+limpa_tela()
+print("\n\n\n---------------------")
+print("Welcome to Minesweeper!")
+print("\u001b[36m---------------------")
+print("Select the dificulty:")
+print("---------------------")
+
+print("\u001b[32m1. Beginner            9x9   - 10 bombs")
+print("\u001b[33m2. Intermediate        16x16 - 40 bombs")
+print("\u001b[31m3. Expert              30x16 - 99 bombs")
+print("\u001b[34m4. Custom (beta)       ??x?? - ?? bombs\u001b[35m")
+
+width = 200
+height = 200
+total_bombs = 10
+
+while True:
+    try:
+        dificulty = int(input("Type your answer: "))
+        if dificulty == 1:
+            width, height = 9*TILESIZE, 9*TILESIZE
+            total_bombs = 10
+            break
+        elif dificulty == 2:
+            width, height = 16*TILESIZE, 16*TILESIZE
+            total_bombs = 40
+            break
+        elif dificulty == 3:
+            width, height = 30*TILESIZE, 16*TILESIZE
+            total_bombs = 99
+            break
+        elif dificulty == 4:
+            width = int(input("width: ")) * TILESIZE
+            height = int(input("height: ")) * TILESIZE
+            maximum = (width // TILESIZE) * (height // TILESIZE) - 1
+            total_bombs = int(input(f"bombs (max: {maximum}): "))
+            if total_bombs > maximum:
+                total_bombs = maximum
+            break
+        else:
+            print("Enter a valid number!")
+            continue
+    except:
+        exit()
+
+game = Game("Minesweeper", (width, height), total_bombs)
 
 game.setup()
 while not game.done:

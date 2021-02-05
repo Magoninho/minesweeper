@@ -4,7 +4,7 @@ import random
 
 
 class Cell:
-    def __init__(self, game, x, y):
+    def __init__(self, game, x, y, bombs):
         self.game = game
         self.x = x
         self.y = y
@@ -12,7 +12,7 @@ class Cell:
         self.j = y // TILESIZE
         self.revelada = False
         self.bomba = False
-        self.bombas_total = 10
+        self.bombas_total = bombs
         self.bombs_around = 0
         self.flag_enabled = False
 
@@ -72,7 +72,6 @@ class Cell:
         """
         This function will draw the numbers according to the total of bombs around the cell.
         Also it will give colors to some numbers
-        TODO: add more colors to more numbers after fixing the bombs generation system
         """
         text_color = (0, 0, 0)
         if self.bombs_around == 1:
@@ -81,6 +80,10 @@ class Cell:
             text_color = (0, 150, 0)
         if self.bombs_around == 3:
             text_color = (150, 0, 0)
+        if self.bombs_around == 4:
+            text_color = (0, 100, 100)
+        if self.bombs_around == 4:
+            text_color = (0, 100, 100)
         if self.bombs_around == 4:
             text_color = (0, 100, 100)
         font = pygame.font.Font("fonts/JetBrainsMono-Bold.ttf", 24)

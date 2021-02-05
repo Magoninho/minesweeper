@@ -4,7 +4,7 @@ This is an attempt of doing a minesweeper in pygame
 ![demo](https://media.giphy.com/media/Oj2OXdUiN5Kq19e9WW/giphy.gif)  
 
 ## Video
-![video](https://youtu.be/7rqDYbTk8Wk)  
+[https://youtu.be/7rqDYbTk8Wk](https://youtu.be/7rqDYbTk8Wk)  
 
 ## Install
 Requirements:  
