@@ -2,6 +2,10 @@
 This is an attempt of doing a minesweeper in pygame  
 
 ![demo](https://media.giphy.com/media/Oj2OXdUiN5Kq19e9WW/giphy.gif)  
+
+## Video
+![video](https://youtu.be/7rqDYbTk8Wk)  
+
 ## Install
 Requirements:  
 python 3.6 to 3.8 (python 3.9 doesn't work)  
