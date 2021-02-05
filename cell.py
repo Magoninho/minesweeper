@@ -12,7 +12,7 @@ class Cell:
         self.j = y // TILESIZE
         self.revelada = False
         self.bomba = False
-        self.bombas_total = 20
+        self.bombas_total = 10
         self.bombs_around = 0
         self.flag_enabled = False
 
