@@ -63,7 +63,7 @@ class Cell:
 
     def enable_flag(self):
         self.flag_enabled = not self.flag_enabled
-        if self.bomba: # TODO: and self.flag_enabled
+        if self.bomba:  # TODO: and self.flag_enabled
             self.game.score += 1
         # TODO: else: self.game.score -= 1
             # all the spots revealed shouldn't be a bomb
@@ -81,11 +81,16 @@ class Cell:
         if self.bombs_around == 3:
             text_color = (150, 0, 0)
         if self.bombs_around == 4:
-            text_color = (0, 100, 100)
-        if self.bombs_around == 4:
-            text_color = (0, 100, 100)
-        if self.bombs_around == 4:
-            text_color = (0, 100, 100)
+            text_color = (133, 39, 138)
+        if self.bombs_around == 5:
+            text_color = (128, 0, 0)
+        if self.bombs_around == 6:
+            text_color = (175, 238, 238)
+        if self.bombs_around == 7:
+            text_color = (0, 0, 0)
+        if self.bombs_around == 8:
+            text_color = (33, 161, 166)
+
         font = pygame.font.Font("fonts/JetBrainsMono-Bold.ttf", 24)
         if self.bombs_around > 0 and self.revelada:
             text = font.render(

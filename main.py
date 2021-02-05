@@ -101,7 +101,7 @@ class Game:
     def gameover(self):
         if self.is_game_over:
             text = font.render(
-                "u lost lmao", False, (RED))
+                "you lost", False, (RED))
             self.screen.blit(text, (self.width // 5, self.height // 3))
 
     def draw_win_text(self):
