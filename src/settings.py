@@ -13,7 +13,9 @@ TILESIZE = 40  # dont change this
 # sounds
 pygame.mixer.init()
 EFFECT = pygame.mixer.Sound('sounds/explosion.ogg')
+EFFECT.set_volume(0.2)
 TADA = pygame.mixer.Sound('sounds/tada.wav')
+TADA.set_volume(0.5)
 
 pygame.font.init()
 font = pygame.font.Font("fonts/JetBrainsMono-Bold.ttf", 32)

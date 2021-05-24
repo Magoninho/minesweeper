@@ -45,9 +45,7 @@ class Cell:
 
                     if neighbor.bomba:
                         total += 1
-                        # debug
-                        # print("ao redor de: ", self.i, self.j,
-                        #       "tem uma bomba na posição: ", i, j, "total: ", total)
+                        
         self.bombs_around = total
 
     def flood(self):
@@ -121,5 +119,4 @@ class Cell:
 
     def get_mouse_pos(self):
         mouse = pygame.mouse.get_pos()
-
         return [mouse[0] // TILESIZE, mouse[1] // TILESIZE]

@@ -139,6 +139,8 @@ class Game:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     exit()
+                if event.key == pygame.K_SPACE:
+                    self.mouse_update(button=2)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 3:
                     self.mouse_update(button=3)
