@@ -20,9 +20,9 @@ cd minesweeper
 
 ### Windows
 
-    python main.py
+    python src/main.py
 
 ### Linux
 
-    python3 ./main.py
+    python3 src/main.py
 
