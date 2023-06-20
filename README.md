@@ -26,3 +26,5 @@ cd minesweeper
 
     python3 src/main.py
 
+# License
+This project is licensed under the terms of the MIT license. The MIT License is a permissive license that is short and to the point. It lets people do anything they want with your code as long as they provide attribution back to you and don’t hold you liable.
